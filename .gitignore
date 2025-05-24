@@ -1,0 +1,5 @@
+data/*
+ui/node_modules
+ml-api/venv
+ml-api/__pycache__
+ui/.env
