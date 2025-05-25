@@ -9,9 +9,9 @@ const mapContainerStyle = {
 };
 
 // initial center of the map
-const defaultCenter = {
-  lat: 37.7749,
-  lng: -122.4194
+const defaultCenter = { // lat y lng de monterrey 25.67365511350586, -100.31864674897571
+  lat: 25.67365511350586,
+  lng: -100.31864674897571
 };
 
 function ClickableMap({ onCoordinatesChange }) { // Accept onCoordinatesChange as a prop
