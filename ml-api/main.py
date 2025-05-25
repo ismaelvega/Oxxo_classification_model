@@ -6,7 +6,13 @@ from fastapi.middleware.cors import CORSMiddleware
 class Query(BaseModel):
     lat: float
     lng: float
-    category: str
+    entorno: str
+    nivelSocioeconomico: str
+    ubicacion: str
+    segmento: str
+    ventasPorMetroCuadrado: float
+    puertasRefrigerador: float
+    cajonesEstacionamiento: float
 
 app = FastAPI()
 app.add_middleware(
@@ -21,11 +27,18 @@ def predict(q: Query):
     try:
         lat = q.lat
         lng = q.lng
-        # Just as an  example return profitability equals true if the sum of lat and lng is greater than 0 and false otherwise
-        profitability = lat + lng > 0
+        entorno = q.entorno
+        nivelSocioeconomico = q.nivelSocioeconomico
+        ubicacion = q.ubicacion
+        segmento = q.segmento
+        ventasPorMetroCuadrado = q.ventasPorMetroCuadrado
+        puertasRefrigerador = q.puertasRefrigerador
+        cajonesEstacionamiento = q.cajonesEstacionamiento
         # Here you would typically call your model to get a prediction
+        profitability = True # dummy value
         # For demonstration, we will just return the input values
-        print(f"Received lat: {lat}, lng: {lng}")
+        print(f"Received lat: {lat}, lng: {lng}, entorno: {entorno}, nivelSocioeconomico: {nivelSocioeconomico}, ubicacion: {ubicacion}, segmento: {segmento}, ventasPorMetroCuadrado: {ventasPorMetroCuadrado}, puertasRefrigerador: {puertasRefrigerador}, cajonesEstacionamiento: {cajonesEstacionamiento}")
+
         return {"lat": lat, "lng": lng, "profitability": profitability}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -1,13 +1,20 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ClickableMap from "./components/ClickableMap";
 
 export default function Home() {
-  const nivelesSocioeconomicos = ["AB","B","BC", "C", "CD", "D"];
-  const tiposEntorno = ["BASE", "HOGAR", "PEATONAL", "RECESO"]
+  const [ventasPorMetroCuadrado, setVentasPorMetroCuadrado] = useState("");
+  const [puertasRefrigerador, setPuertasRefrigerador] = useState("");
+  const [cajonesEstacionamiento, setCajonesEstacionamiento] = useState("");
   const [lat, setLat] = useState("");
   const [lng, setLng] = useState("");
   const [profilability, setProfilability] = useState("");
+  const nivelesSocioeconomicos = ["AB","B","BC", "C", "CD", "D"];
+  const tiposEntorno = ["BASE", "HOGAR", "PEATONAL", "RECESO"]
+  const tiposSegmento = ["BARRIO COMPETIDO", "CLÁSICO", "HOGAR REUNIÓN", "OFICINISTAS", "PARADA TÉCNICA"]
+  const tipoUbicacion = ["UT_CARRETERA_GAS", "UT_DENSIDAD", "UT_GAS_URBANA", "UT_TRAFICO_PEATONAL", "UT_TRAFICO_VEHICULAR"]
+  const [ubicacion, setUbicacion] = useState(tipoUbicacion[0]);
+  const [segmento, setSegmento] = useState(tiposSegmento[0]);
   const [entorno, setEntorno] = useState(tiposEntorno[0]);
   const [nivelSocioeconomico, setNivelSocioeconomico] = useState(nivelesSocioeconomicos[0]);
 
@@ -29,6 +36,26 @@ export default function Home() {
       return;
     }
     setLng(event.target.value);
+  }
+
+  const handleVentasPorMetroCuadradoChange = (event) => {
+    setVentasPorMetroCuadrado(event.target.value);
+  }
+
+  const handlePuertasRefrigeradorChange = (event) => {
+    setPuertasRefrigerador(event.target.value);
+  }
+
+  const handleCajonesEstacionamientoChange = (event) => {
+    setCajonesEstacionamiento(event.target.value);
+  }
+
+  const handleSetUbicacion = (event) => {
+    setUbicacion(event.target.value);
+  }
+
+  const handleSetSegmento = (event) => {
+    setSegmento(event.target.value);
   }
 
   const handleEntornoChange = (event) => {
@@ -68,7 +95,12 @@ export default function Home() {
         lat: Number(lat),
         lng: Number(lng),
         entorno,
-        nivelSocioeconomico 
+        nivelSocioeconomico,
+        ubicacion,
+        segmento,
+        ventasPorMetroCuadrado: Number(ventasPorMetroCuadrado),
+        puertasRefrigerador: Number(puertasRefrigerador),
+        cajonesEstacionamiento: Number(cajonesEstacionamiento)
        }),
     })
 
@@ -82,14 +114,6 @@ export default function Home() {
       alert("Error: " + data.error);
     }
   }
-
-  useEffect(() => {
-    // set entorno to the first option on initial render
-    // if (houseCategories.length > 0) {
-    //   setEntorno(houseCategories[0]);
-    // }
-  }
-  , [houseCategories]);
 
   const handleMapCoordinatesUpdate = (newCoords) => {
     setLat(newCoords.lat.toString()); // Update lat state in page.js
@@ -123,8 +147,40 @@ export default function Home() {
             />
           </div>
         {/* divider horizonal line */}
+          <div className="flex flex-col gap-2">
+            <label htmlFor="ventasPorMetroCuadrado">Ventas por Metro Cuadrado</label>
+            <input
+              type="number"
+              id="ventasPorMetroCuadrado"
+              value={ventasPorMetroCuadrado}
+              onChange={handleVentasPorMetroCuadradoChange}
+              className="border border-gray-300 rounded p-2"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="puertasRefrigerador">Puertas Refrigerador</label>
+            <input
+              type="number"
+              id="puertasRefrigerador"
+              value={puertasRefrigerador}
+              onChange={handlePuertasRefrigeradorChange}
+              className="border border-gray-300 rounded p-2"
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="cajonesEstacionamiento">Cajones Estacionamiento</label>
+            <input
+              type="number"
+              id="cajonesEstacionamiento"
+              value={cajonesEstacionamiento}
+              onChange={(e) => handleCajonesEstacionamientoChange(e)}
+              className="border border-gray-300 rounded p-2"
+            />
+          </div>
         </div>
         <div className="border-t border-gray-300 my-4 w-full"></div>
+        {/* Horizontal group for select inputs */}
+        <div className="flex flex-row gap-6 my-4">
           <div className="flex flex-col gap-2">
             <label htmlFor="entorno">Entorno</label>
             <select
@@ -133,7 +189,7 @@ export default function Home() {
               onChange={(e) => handleEntornoChange(e)}
               className="border border-gray-300 rounded p-2"
             >
-              {houseCategories.map((entorno) => (
+              {tiposEntorno.map((entorno) => (
                 <option key={entorno} value={entorno}>
                   {entorno}
                 </option>
@@ -155,13 +211,44 @@ export default function Home() {
               ))}
             </select>
           </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="ubicacion">Ubicacion</label>
+              <select
+                id="ubicacion"
+                value={ubicacion}
+                onChange={(e) => handleSetUbicacion(e)}
+                className="border border-gray-300 rounded p-2"
+              >
+                {tipoUbicacion.map((ubicacion) => (
+                  <option key={ubicacion} value={ubicacion}>
+                    {ubicacion}
+                  </option>
+                ))}
+              </select>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="segmento">Segmento</label>
+                <select
+                  id="segmento"
+                  value={segmento}
+                  onChange={(e) => handleSetSegmento(e)}
+                  className="border border-gray-300 rounded p-2"
+                >
+                  {tiposSegmento.map((segmento) => (
+                    <option key={segmento} value={segmento}>
+                      {segmento}
+                    </option>
+                  ))}
+                </select>
+          </div>
+        </div>
           <button
             onClick={handleButtonClick}
             className="bg-blue-500 text-white rounded p-2 h-12 self-end hover:bg-blue-600 transition duration-200 mt-4"
           >
             Predict
           </button>
-        <div className="text-xxl font-bold mt-8">
+        <div className="text-xl font-bold mt-8">
           {profilability && <p>Rentable?: <span className={profilability === "Yes" ? "text-green-500" : "text-red-500"}>{profilability}</span></p>}
         </div>
         <div className="mt-8">
