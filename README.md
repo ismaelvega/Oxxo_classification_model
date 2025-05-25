@@ -18,7 +18,6 @@ Este proyecto implementa un sistema completo para predecir la rentabilidad de ub
 ```
 ├── ml-api/              # API de Machine Learning (FastAPI)
 ├── ui/                  # Interfaz de usuario (Next.js)
-├── data/               # Datos de entrenamiento
 └── info/               # Documentación del proyecto
 ```
 
