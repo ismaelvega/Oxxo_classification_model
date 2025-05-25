@@ -3,12 +3,12 @@ import { useState } from "react";
 import ClickableMap from "./components/ClickableMap";
 
 export default function Home() {
-  const [ventasPorMetroCuadrado, setVentasPorMetroCuadrado] = useState("");
-  const [puertasRefrigerador, setPuertasRefrigerador] = useState("");
-  const [cajonesEstacionamiento, setCajonesEstacionamiento] = useState("");
+  const [ventasPorMetroCuadrado, setVentasPorMetroCuadrado] = useState(42000);
+  const [puertasRefrigerador, setPuertasRefrigerador] = useState(4);
+  const [cajonesEstacionamiento, setCajonesEstacionamiento] = useState(6);
   const [lat, setLat] = useState("");
   const [lng, setLng] = useState("");
-  const [profilability, setProfilability] = useState("");
+  const [profilability, setProfilability] = useState(false);
   const nivelesSocioeconomicos = ["AB","B","BC", "C", "CD", "D"];
   const tiposEntorno = ["BASE", "HOGAR", "PEATONAL", "RECESO"]
   const tiposSegmento = ["BARRIO COMPETIDO", "CLÁSICO", "HOGAR REUNIÓN", "OFICINISTAS", "PARADA TÉCNICA"]
@@ -20,7 +20,6 @@ export default function Home() {
 
 
   const handleLatChange = (event) => {
-    // Validate latitude input
     const value = event.target.value;
     if (value && (isNaN(value))) {
       alert("Please enter a valid latitude value.");
@@ -29,7 +28,6 @@ export default function Home() {
     setLat(event.target.value);
   }
   const handleLngChange = (event) => {
-    // Validate longitude input
     const value = event.target.value;
     if (value && (isNaN(value))) {
       alert("Please enter a valid longitude value.");
@@ -67,7 +65,6 @@ export default function Home() {
   }
 
   const handleButtonClick = async () => {
-    // Validate inputs before making the request
     if (!lat || !lng) {
       alert("Please enter both latitude and longitude.");
       return;
@@ -82,6 +79,21 @@ export default function Home() {
     }
     if (!nivelSocioeconomico) {
       alert("Please select a socio-economic level.");
+      return;
+    }
+
+    if (!ubicacion) {
+      alert("Please select a ubicacion.");
+      return;
+    }
+
+    if (!segmento) {
+      alert("Please select a segmento.");
+      return;
+    }
+
+    if (!ventasPorMetroCuadrado) {
+      alert("Please enter ventas por metro cuadrado.");
       return;
     }
 
