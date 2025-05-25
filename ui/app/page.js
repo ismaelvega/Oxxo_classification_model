@@ -3,19 +3,14 @@ import { useState, useEffect } from "react";
 import ClickableMap from "./components/ClickableMap";
 
 export default function Home() {
+  const nivelesSocioeconomicos = ["AB","B","BC", "C", "CD", "D"];
+  const tiposEntorno = ["BASE", "HOGAR", "PEATONAL", "RECESO"]
   const [lat, setLat] = useState("");
   const [lng, setLng] = useState("");
   const [profilability, setProfilability] = useState("");
-  const [category, setCategory] = useState("");
+  const [entorno, setEntorno] = useState(tiposEntorno[0]);
+  const [nivelSocioeconomico, setNivelSocioeconomico] = useState(nivelesSocioeconomicos[0]);
 
-  const houseCategories = [
-    "House",
-    "Apartment",
-    "Condo",
-    "Townhouse",
-    "Villa",
-    "Cottage",
-  ]
 
   const handleLatChange = (event) => {
     // Validate latitude input
@@ -36,8 +31,12 @@ export default function Home() {
     setLng(event.target.value);
   }
 
-  const handleCategoryChange = (event) => {
-    setCategory(event.target.value);
+  const handleEntornoChange = (event) => {
+    setEntorno(event.target.value);
+  }
+
+  const handleNivelSocioeconomicoChange = (event) => {
+    setNivelSocioeconomico(event.target.value);
   }
 
   const handleButtonClick = async () => {
@@ -50,17 +49,27 @@ export default function Home() {
       alert("Latitude and longitude must be numbers.");
       return;
     }
-    if (!category) {
-      alert("Please select a house category.");
+    if (!entorno) {
+      alert("Please select un entorno.");
       return;
     }
+    if (!nivelSocioeconomico) {
+      alert("Please select a socio-economic level.");
+      return;
+    }
+
 
     const res = await fetch("http://localhost:8000/predict", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ lat: Number(lat), lng: Number(lng) , category }),
+      body: JSON.stringify({
+        lat: Number(lat),
+        lng: Number(lng),
+        entorno,
+        nivelSocioeconomico 
+       }),
     })
 
     const data = await res.json();
@@ -75,9 +84,9 @@ export default function Home() {
   }
 
   useEffect(() => {
-    // set category to the first option on initial render
+    // set entorno to the first option on initial render
     // if (houseCategories.length > 0) {
-    //   setCategory(houseCategories[0]);
+    //   setEntorno(houseCategories[0]);
     // }
   }
   , [houseCategories]);
@@ -117,16 +126,31 @@ export default function Home() {
         </div>
         <div className="border-t border-gray-300 my-4 w-full"></div>
           <div className="flex flex-col gap-2">
-            <label htmlFor="category">Tipo de sucursal</label>
+            <label htmlFor="entorno">Entorno</label>
             <select
-              id="category"
-              value={category}
-              onChange={(e) => handleCategoryChange(e)}
+              id="entorno"
+              value={entorno}
+              onChange={(e) => handleEntornoChange(e)}
               className="border border-gray-300 rounded p-2"
             >
-              {houseCategories.map((category) => (
-                <option key={category} value={category}>
-                  {category}
+              {houseCategories.map((entorno) => (
+                <option key={entorno} value={entorno}>
+                  {entorno}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="nivelSocioeconomico">Nivel Socioeconomico</label>
+            <select
+              id="nivelSocioeconomico"
+              value={nivelSocioeconomico}
+              onChange={(e) => handleNivelSocioeconomicoChange(e)}
+              className="border border-gray-300 rounded p-2"
+            >
+              {nivelesSocioeconomicos.map((nivel) => (
+                <option key={nivel} value={nivel}>
+                  {nivel}
                 </option>
               ))}
             </select>
